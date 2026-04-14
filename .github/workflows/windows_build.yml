@@ -1,0 +1,33 @@
+name: Windows Build Steps
+
+on:
+  workflow_call:
+  push:
+
+jobs:
+  build_windows_x:
+    name: "Build for Windows x64"
+    runs-on: windows-2025
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Locate vcvars
+        shell: cmd
+        run: |
+            for /f "usebackq tokens=*" %%i in (`call vswhere -latest -property installationPath`) do set "VSINSTPATH=%%i"
+            echo VCVARSPATH=%VSINSTPATH%\VC\Auxiliary\Build\vcvars64.bat>>%GITHUB_ENV%
+
+      - name: Configure
+        shell: cmd
+        run: |
+          call "%VCVARSPATH%" || exit /b
+          bash ./configure --enable-gpl --enable-memory-poisoning --arch=x86_64 --target-os=win32 --extra-cflags=-MD --extra-cxxflags=-MD --toolchain=msvc --enable-cross-compile --disable-debug || exit /b
+
+      - name: Build
+        shell: cmd
+        run: |
+          call "%VCVARSPATH%" || exit /b
+          make -j%NUMBER_OF_PROCESSORS% || exit /b
