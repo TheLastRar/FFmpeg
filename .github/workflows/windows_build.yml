@@ -24,7 +24,7 @@ jobs:
         shell: cmd
         run: |
           call "%VCVARSPATH%" || exit /b
-          bash ./configure --enable-gpl --enable-memory-poisoning --arch=x86_64 --target-os=win32 --extra-cflags=-MD --extra-cxxflags=-MD --toolchain=msvc --enable-cross-compile --disable-debug || exit /b
+          bash ./configure --enable-gpl --enable-memory-poisoning --arch=x86_64 --target-os=win32 --extra-cflags=-MD --extra-cxxflags=-MD --toolchain=msvc --disable-debug || exit /b
 
       - name: Build
         shell: cmd
