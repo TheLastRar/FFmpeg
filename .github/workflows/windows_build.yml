@@ -30,4 +30,4 @@ jobs:
         shell: cmd
         run: |
           call "%VCVARSPATH%" || exit /b
-          make -j%NUMBER_OF_PROCESSORS% || exit /b
+          make -j1 || exit /b
